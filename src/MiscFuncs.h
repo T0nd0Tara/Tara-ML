@@ -3,7 +3,6 @@
 #include "Headers.h"
 
 
-
 inline float dotProd(std::vector<float>* a, std::vector<float>* b) {
 	if (a->size() != b->size()) {
 		throw std::invalid_argument("Cannot do dot product with to different sized arrays");
@@ -29,8 +28,8 @@ inline void dotProd(std::vector<float>* a, std::vector<float>* b, int size, floa
 
 inline void vecToArr(std::vector<float>* in, float* out) {
 	for (int i = 0; i < in->size(); i++) {
-		*out = (*in)[i];
-		out++;
+		out[i] = (*in)[i];
+
 	}
 }
 
@@ -69,6 +68,7 @@ inline std::string arrToString(float* in, int size, int drop) {
 }
 inline std::string vecToString(std::vector<float>* in) {
 	std::string out = "{";
+
 	
 	for (int i = 0; i < in->size(); i++) {
 		out += std::to_string((*in)[i]);
@@ -119,3 +119,4 @@ inline void Transpose(float* io, int size, int new_line) {
 inline int len(float in) {
 	return std::to_string(in).length();
 }
+

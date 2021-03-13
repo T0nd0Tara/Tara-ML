@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Headers.h"
+#include "..\Headers.h"
 
 struct Neuron;
 class Layer

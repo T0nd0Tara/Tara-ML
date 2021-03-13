@@ -1,5 +1,5 @@
 #pragma once
-#include "Headers.h"
+#include "..\Headers.h"
 
 
 class Matrixf
@@ -7,10 +7,14 @@ class Matrixf
 private:
 	int width, height, size;
 	float* arr;
-	bool _ok;
+	bool _ok = true;
+
+	std::string _Error = "";
+
 public:
 	Matrixf(float*, int , int);
-	Matrixf(std::vector<float>*, int);
+	Matrixf(std::vector<float>* , int);
+	Matrixf(std::vector<float>* , int, bool);
 	std::string to_string();
 	std::vector<float>* to_vec();
 
@@ -27,12 +31,20 @@ public:
 	std::vector<float>* get_rowVec(int);
 	std::vector<float>* get_colVec(int);
 
+	bool ok(std::string*) const;
+	
 
-	float* operator[](int index) {
-		return &arr[index];
+	Matrixf operator[](int index) {
+		if (height > 1)
+			return get_row(index);
+		return get_col(index);
 	}
 
-	friend Matrixf operator*(Matrixf a, Matrixf b);
+	friend Matrixf operator*(Matrixf, Matrixf);
+	friend Matrixf operator+(Matrixf, float);
+	friend Matrixf operator+(float, Matrixf);
+	friend Matrixf operator+(Matrixf, Matrixf);
+
 	friend std::ostream& operator<<(std::ostream& out, Matrixf a) {
 		out << a.to_string();
 		return out;

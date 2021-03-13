@@ -12,31 +12,48 @@ int main() {
 											{ 0.5f,   -0.91f,  0.26f, -0.5   },
 											{-0.26f, -0.27f,  0.17f,  0.87f } };
 
-	const int length = inputs.size() / (weights[0].size() * BatchSize); // The length of values each nueron send
+	float bias[neurons] = { 2.0f, 3.0f, 0.5f };
 
+	//const int length = inputs.size() / (weights[0].size() * BatchSize); // The length of values each nueron send
+
+	//
 	
-	float bias[3] = {2.0f, 3.0f, 0.5f};
-	Layer layer(&inputs, weights, bias, neurons, BatchSize);
+	//Layer layer(&inputs, weights, bias, neurons, BatchSize);
 
-	
+	//
 
-	if (layer.ok())
-		std::cout << layer.to_string();
-	else
-		std::cout << "Layer not ok\n";
+	//if (layer.ok())
+	//	std::cout << layer.to_string();
+	//else
+	//	std::cout << "Layer not ok\n";
 
 
-	float *outs = new float[length * neurons];
+	//float *outs = new float[length * neurons];
 
-	layer.get_outs(outs);
+	//layer.get_outs(outs);
 
-	std::cout << arrToString(outs, length * neurons, length) << "\n\n";
+	//std::cout << arrToString(outs, length * neurons, length) << "\n\n";
 
-	Transpose(outs, length * neurons, length);
+	//Transpose(outs, length * neurons, length);
 
-	std::cout << arrToString(outs, length * neurons, length) << "\n\n\n";
-	
+	//std::cout << arrToString(outs, length * neurons, length) << "\n\n\n";
 
+
+	Matrixf matInputs(&inputs, inputs.size() / neurons);
+	Matrixf matWeights(&weights[0], neurons, true);
+	Matrixf matBias(bias, neurons, 1);
+
+	std::cout << matInputs * matWeights.T() << "\n\n";
+
+
+	try {
+		std::cout << (matInputs * matWeights.T()) + matBias << '\n';
+	}
+	catch (std::invalid_argument& e) {
+		std::cout << e.what();
+	}
+		
+	//Matrixf matInputs();
 
 
 	return 0;

@@ -65,11 +65,6 @@ float Neuron::get_value_by_input(std::vector<float>* input) {
 }
 
 void Neuron::get_values(float* outArr){
-	
-	/*if (BatchSize == maxBatchSize()) {
-		*outArr = get_value_by_input(inputs);
-		return;
-	}*/
 
 	std::vector<float>* newVec = new std::vector<float>();
 	for (int i = 0; i < inputs->size() / (weights.size() * BatchSize); i++) {
@@ -81,7 +76,6 @@ void Neuron::get_values(float* outArr){
 		
 	}
 
-	//outArr -= inputs->size() / BatchSize;
 	delete newVec;
 }
 

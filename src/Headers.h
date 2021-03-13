@@ -5,7 +5,7 @@
 #include <string>
 #include <stdexcept>
 
-#include "Matrixf.h"
 #include "MiscFuncs.h"
-#include "Neuron.h"
-#include "Layer.h"
+#include "Classes/Matrixf.h"
+#include "Classes/Neuron.h"
+#include "Classes/Layer.h"
