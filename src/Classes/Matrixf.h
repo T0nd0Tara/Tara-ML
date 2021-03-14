@@ -7,14 +7,24 @@ class Matrixf
 private:
 	int width, height, size;
 	float* arr;
+
+
 	bool _ok = true;
 
 	std::string _Error = "";
 
 public:
+	
+
+
+	Matrixf();
 	Matrixf(float*, int , int);
 	Matrixf(std::vector<float>* , int);
 	Matrixf(std::vector<float>* , int, bool);
+
+	Matrixf(float, int, int);
+
+
 	std::string to_string();
 	std::vector<float>* to_vec();
 
@@ -31,8 +41,13 @@ public:
 	std::vector<float>* get_rowVec(int);
 	std::vector<float>* get_colVec(int);
 
+	float get_cell(int i) const;
+
+
 	bool ok(std::string*) const;
 	
+	void setHeightWidth(int, int);
+	std::string get_dim();
 
 	Matrixf operator[](int index) {
 		if (height > 1)
@@ -40,7 +55,10 @@ public:
 		return get_col(index);
 	}
 
+	friend Matrixf operator*(Matrixf, float);
+	friend Matrixf operator*(float, Matrixf);
 	friend Matrixf operator*(Matrixf, Matrixf);
+
 	friend Matrixf operator+(Matrixf, float);
 	friend Matrixf operator+(float, Matrixf);
 	friend Matrixf operator+(Matrixf, Matrixf);

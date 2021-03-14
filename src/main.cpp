@@ -1,60 +1,25 @@
 #include "Headers.h"
-
+#include "Classes/Matrixf.h"
+#include "Classes/LayerDense.h"
+#include "Classes/Neuron.h"
+#include "Classes/Layer.h"
+#include "ActivationFuncs.h"
 
 int main() {
-	const int neurons = 3;
+	const int neurons = 5;
 	const int BatchSize = 1;
 	std::vector<float> inputs     = {   1.0f,    2.0f,   3.0f,   2.5f,
 									    2.0f,    5.0f,  -1.0f,   2.0f,
 									   -1.5f,    2.7f,   3.3f,  -0.8f};
+	Matrixf matInputs = {&inputs , (int)4 };
 
-	std::vector<float> weights[neurons] = { { 0.2f,    0.8f,  -0.5f,   1.0f  },
-											{ 0.5f,   -0.91f,  0.26f, -0.5   },
-											{-0.26f, -0.27f,  0.17f,  0.87f } };
+	LayerDense layer1(4, neurons, af::ReLU);
 
-	float bias[neurons] = { 2.0f, 3.0f, 0.5f };
-
-	//const int length = inputs.size() / (weights[0].size() * BatchSize); // The length of values each nueron send
-
-	//
-	
-	//Layer layer(&inputs, weights, bias, neurons, BatchSize);
-
-	//
-
-	//if (layer.ok())
-	//	std::cout << layer.to_string();
-	//else
-	//	std::cout << "Layer not ok\n";
+	LayerDense layer2(neurons, 2, af::sigmoid);
 
 
-	//float *outs = new float[length * neurons];
 
-	//layer.get_outs(outs);
-
-	//std::cout << arrToString(outs, length * neurons, length) << "\n\n";
-
-	//Transpose(outs, length * neurons, length);
-
-	//std::cout << arrToString(outs, length * neurons, length) << "\n\n\n";
-
-
-	Matrixf matInputs(&inputs, inputs.size() / neurons);
-	Matrixf matWeights(&weights[0], neurons, true);
-	Matrixf matBias(bias, neurons, 1);
-
-	std::cout << matInputs * matWeights.T() << "\n\n";
-
-
-	try {
-		std::cout << (matInputs * matWeights.T()) + matBias << '\n';
-	}
-	catch (std::invalid_argument& e) {
-		std::cout << e.what();
-	}
-		
-	//Matrixf matInputs();
-
+	std::cout << *layer2.forward(layer1.forward(&matInputs)) << "\n\n";
 
 	return 0;
 }

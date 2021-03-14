@@ -120,3 +120,10 @@ inline int len(float in) {
 	return std::to_string(in).length();
 }
 
+
+inline void randArr(float* out, int size) { // return a random array with each element v: 0<=v<=1
+	for (int i = 0; i < size; i++) {
+		*out = 2* ((float)rand() / (float)RAND_MAX) - 1.0f;
+		out++;
+	}
+}

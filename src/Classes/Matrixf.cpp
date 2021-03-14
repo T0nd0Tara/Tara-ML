@@ -1,5 +1,17 @@
 #include "Matrixf.h"
 
+Matrixf::Matrixf() { // Default-constructor
+	_Error = "";
+	_ok = true;
+
+	width = 1;
+	height = 1;
+	size = 1;
+	arr = new float[size];
+	arr[0] = 0.0f;
+}
+
+
 Matrixf::Matrixf(float* setArr, int setWidth, int setHeight) { // for array
 	_ok = true;
 	_Error = "";
@@ -76,8 +88,27 @@ Matrixf::Matrixf(std::vector<float>* setVec, int setHeight, bool ArrayOfVectors)
 
 }
 
+Matrixf::Matrixf(float setVal, int setWidth, int setHeight) { // sets all of the array to setVal
+	_ok = true;
+	_Error = "";
+	
+	width = setWidth;
+	height = setHeight;
+	size = width * height;
+
+	arr = new float[size];
+
+	for (int i = 0; i < size; i++) {
+		arr[i] = setVal;
+	}
+}
+
 std::string Matrixf::to_string() {
 	std::string out = "{ ";
+	int spaceAdd = 0;
+	if (8 <= len(arr[0]))
+		spaceAdd = len(arr[0]) - 8;
+
 	for (int i = 0; i < size; i++) {
 		out += std::to_string(arr[i]);
 
@@ -85,7 +116,7 @@ std::string Matrixf::to_string() {
 			out += ',' + addSpace(11 - len(arr[i+1]));
 
 			if ((i + 1) % width == 0)
-				out += "\n" + addSpace(10 - len(arr[i+1]));
+				out += "\n" + addSpace(10 - len(arr[i+1]) + spaceAdd);
 		}
 	}
 
@@ -145,10 +176,44 @@ std::vector<float>* Matrixf::get_rowVec(int ind) {
 std::vector<float>* Matrixf::get_colVec(int ind) {
 	return get_col(ind).to_vec();
 }
-
+float Matrixf::get_cell(int i) const{
+	while (i < 0) {
+		i += size;
+	}
+	if (i >= size) {
+		// Error
+		/*this->_Error += "Cannot access an indexed cell i when i >= Matrixf::size.\n";
+		this->_ok = false;*/
+	}
+	return arr[i];
+}
 bool Matrixf::ok(std::string* out) const {
 	*out = _Error;
 	return _ok;
+}
+
+void Matrixf::setHeightWidth(int setHeight, int setWidth) {
+	
+	width = setWidth;
+	height = setHeight;
+	size = width*height;
+}
+
+std::string Matrixf::get_dim() {
+	return "{ " + std::to_string(width) + ", " + std::to_string(height) + " }";
+}
+
+Matrixf operator*(Matrixf a, float alpha) {
+	float* newArr = new float[a.size];
+
+	for (int i = 0; i < a.size; i++) {
+		newArr[i] = alpha * a.arr[i];
+	}
+	return Matrixf(newArr, a.width, a.height);
+}
+
+Matrixf operator*(float alpha, Matrixf a) {
+	return a * alpha;
 }
 
 Matrixf operator*(Matrixf a, Matrixf b) {
@@ -162,15 +227,6 @@ Matrixf operator*(Matrixf a, Matrixf b) {
 		return a;
 	}
 
-	if (a.get_height() != b.get_width()) {
-		// Error
-
-		std::cout << "Matrix mult error: a.height != b.width";
-		throw std::invalid_argument("Matrix mult error: a.height != b.width : a.height = "
-			+ std::to_string(a.get_height()) + "; b.width = " + std::to_string(b.get_width()));
-		
-		return a;
-	}
 
 	float* out = new float[a.get_height() * b.get_width()];
 
