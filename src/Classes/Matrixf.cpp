@@ -151,6 +151,19 @@ bool Matrixf::ok(std::string* out) const {
 	return _ok;
 }
 
+Matrixf operator*(Matrixf a, float alpha) {
+	float* newArr = new float[a.size];
+
+	for (int i = 0; i < a.size; i++) {
+		newArr[i] = alpha * a.arr[i];
+	}
+	return Matrixf(newArr, a.width, a.height);
+}
+
+Matrixf operator*(float alpha, Matrixf a) {
+	return a * alpha;
+}
+
 Matrixf operator*(Matrixf a, Matrixf b) {
 	if (b.get_height() != a.get_width()) {
 		// Error
