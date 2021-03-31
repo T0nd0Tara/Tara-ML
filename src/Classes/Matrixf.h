@@ -67,6 +67,9 @@ public:
 		out << a.to_string();
 		return out;
 	}
+
+	friend bool operator==(Matrixf, Matrixf);
+
 };
 
 

@@ -327,6 +327,18 @@ Matrixf operator+(Matrixf a, Matrixf b) {
 
 }
 
+bool operator==(Matrixf a, Matrixf b) {
+	if (a.width != b.width || a.height != b.height)
+		return false;
+
+	for (int i = 0; i < a.size; i++)
+		if (a.arr[i] != b.arr[i])
+			return false;
+
+	return true;
+}
+
+
 bool is1x1(Matrixf a) {
 	return (a.get_width() == 1 && a.get_height() == 1);
 }

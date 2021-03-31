@@ -11,7 +11,7 @@ inline float dotProd(std::vector<float>* a, std::vector<float>* b) {
 	}
 
 	float sum = 0.0f;
-	for (int i = 0; i < a->size(); i++)
+	for (int i = 0; i < (a->size()); i++)
 		sum += (*a)[i] * (*b)[i];
 
 	return sum;
@@ -120,10 +120,22 @@ inline int len(float in) {
 	return std::to_string(in).length();
 }
 
+// random number between 0 and 1
+inline float rand0_1() { 
+	return (float)rand() / (float)RAND_MAX;
+}
 
-inline void randArr(float* out, int size) { // return a random array with each element v: 0<=v<=1
+// random number between -1 and 1
+inline float rand_1_1() { 
+	return 2.0f * rand0_1() - 1.0f;
+}
+
+// return a random array with each element v: -1<=v<=1
+inline void randArr(float* out, int size) { 
 	for (int i = 0; i < size; i++) {
-		*out = 2* ((float)rand() / (float)RAND_MAX) - 1.0f;
+		*out = 2.0f * rand0_1() - 1.0f;
 		out++;
 	}
 }
+
+
