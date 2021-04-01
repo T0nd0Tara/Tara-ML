@@ -24,14 +24,20 @@ inline Matrixf softmax(Matrixf in) {
 		return in;
 	}
 
-	Matrixf expVals(0.0f, in.get_size(), 1), normVals(0.0f, in.get_size(), 1);
+	Matrixf normVals(0.0f, in.get_size(), 1);
 	
+	std::vector<long double> expVals;
 
-	float sumExp = 0.0f;
+	expVals.resize(in.get_size());
+
+	long double sumExp = 0.0f;
 
 	for (int i = 0; i < in.get_size(); i++) {
-		float tempExp = exp(in[i]);
-		expVals.set_cell(i, tempExp);
+		// the std::min makes sure that the resulting value could be represented by float type
+		long double tempExp  = expl(std::min((long double)in[i], (long double)11355.0));
+		if (tempExp > 1e+300)
+			tempExp = 1e+300;
+		expVals[i] = tempExp;
 		sumExp += tempExp;
 	}
 
@@ -39,7 +45,10 @@ inline Matrixf softmax(Matrixf in) {
 		normVals.set_cell(i, expVals[i] / sumExp);
 	}
 
-	//delete& expVals, & sumExp;
+	// deleting unused memory 
+	expVals.clear();
+	expVals.shrink_to_fit();
+
 	return normVals;
 }
 }

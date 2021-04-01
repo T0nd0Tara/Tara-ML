@@ -51,13 +51,16 @@ public:
 
 		*output = ((*inputs) * (*weights)) + *biases;
 		
+		*output = output->norm();
 
 		if (usingMatAf) {
 			std::vector<Matrixf> tempOutArr;
-			tempOutArr.resize(output->get_width());
+			tempOutArr.resize(output->get_height());
 
-			for (int i = 0; i < (output->get_width()); i++)
+			for (int i = 0; i < (output->get_height()); i++)
 				tempOutArr[i] = (*matAf)(output->get_row(i));
+
+
 			output = new Matrixf(tempOutArr);
 
 		}

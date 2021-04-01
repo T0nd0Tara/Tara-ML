@@ -30,8 +30,16 @@ public:
 	std::string to_string();
 	std::vector<float>* to_vec();
 
+	float sum();
+	float biggest();
+	float smallest();
+	
+	float abs_biggest();
+
 	Matrixf T();
 	Matrixf Transpose();
+
+	Matrixf norm();
 
 	int get_width()  const {return width;}
 	int get_height() const {return height;}
@@ -52,7 +60,7 @@ public:
 	void setHeightWidth(int, int);
 	std::string get_dim();
 
-	float sum();
+	
 
 	float operator[](int index){
 		return arr[index];

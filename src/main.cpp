@@ -21,7 +21,7 @@ int main() {
 	int classes = 3;
 	std::vector<std::pair<int, int>>* vec = new std::vector<std::pair<int, int>>[classes];
 	std::vector<std::pair<float, float>>* vecf = new std::vector<std::pair<float, float>>[classes];
-	dgs::spiralDots2d(1000, 100, classes, vec, 1.0f, 0.5f, 0.5f);
+	dgs::spiralDots2d(1000, 10, classes, vec, 1.0f, 0.5f, 0.5f);
 	//drawPoints(1000, 1, classes, vec);
 
 	convert<int, float>(vec, vecf, classes);
@@ -39,17 +39,12 @@ int main() {
 	
 
 	std::cout << layer1 << '\n';
-	try {
-		Matrixf out = *layer1.forward(&matInputs);
-		std::cout << out << '\n';
 
-		for (int i = 0; i < out.get_height(); i++) {
-			std::cout << out.get_row(i).sum() << '\n';
-		}
-	}
-	catch (std::invalid_argument& e) {
-		std::cout << "Error: " << e.what();
-	}
+	Matrixf out = *layer1.forward(&matInputs);
+	std::cout << out << '\n';
+
+
+
 
 	//LayerDense layer2(5, 2, af::sigmoid);
 	//std::cout << *layer2.forward(layer1.forward(&matInputs)) << "\n\n";

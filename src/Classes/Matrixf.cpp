@@ -131,7 +131,7 @@ Matrixf::Matrixf(std::vector<Matrixf> in) {
 			return;
 		}
 	}
-	//delete& modelDim;
+
 
 
 	bool Horizontals = (in[0].get_height() == 1);
@@ -145,7 +145,7 @@ Matrixf::Matrixf(std::vector<Matrixf> in) {
 
 		for (int row = 0; row < height; row++) {
 			for (int cell = 0; cell < width; cell++) {
-				arr[cell + row * height] = in[row][cell];
+				arr[cell + row * width] = in[row][cell];
 			}
 		}
 	}
@@ -212,6 +212,40 @@ std::vector<float>* Matrixf::to_vec() {
 
 	return out;
 }
+
+float Matrixf::sum() {
+	float out = 0.0f;
+	for (int i = 0; i < size; i++) {
+		out += arr[i];
+	}
+	return out;
+}
+
+float Matrixf::biggest() {
+	float b = arr[0];
+	for (int i = 1; i < size; i++) {
+		if (arr[i] > b) b = arr[i];
+	}
+	return b;
+}
+
+float Matrixf::smallest() {
+	float s = arr[0];
+	for (int i = 1; i < size; i++) {
+		if (arr[i] < s) s = arr[i];
+	}
+	return s;
+}
+
+float Matrixf::abs_biggest() {
+	float b = std::abs(arr[0]);
+	for (int i = 1; i < size; i++) {
+		float temp = std::abs(arr[i]);
+		if (temp > b) b = temp;
+	}
+	return b;
+}
+
 Matrixf Matrixf::T() {
 	float* out = new float[size];
 
@@ -227,6 +261,18 @@ Matrixf Matrixf::T() {
 
 Matrixf Matrixf::Transpose() {
 	return this->T();
+}
+
+Matrixf Matrixf::norm() {
+	float b = abs_biggest();
+	if (b == 0.0f)
+		return *this;
+
+	float* tempArr = new float[size];
+	for (int i = 0; i < size; i++) {
+		tempArr[i] = arr[i] / b;
+	}
+	return Matrixf(tempArr, width, height);
 }
 
 Matrixf Matrixf::get_row(int ind) {
@@ -288,13 +334,7 @@ std::string Matrixf::get_dim() {
 	return "{ " + std::to_string(width) + ", " + std::to_string(height) + " }";
 }
 
-float Matrixf::sum() {
-	float out = 0.0f;
-	for (int i = 0; i < size; i++) {
-		out += arr[i];
-	}
-	return out;
-}
+
 
 Matrixf operator*(Matrixf a, float alpha) {
 	float* newArr = new float[a.size];

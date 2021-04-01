@@ -1,14 +1,14 @@
 #pragma once
-#include "Headers.h"
-
 #ifndef OLC_PGE_APPLICATION
 #define OLC_PGE_APPLICATION
 #endif
+
+#include "Headers.h"
 #include "olcPixelGameEngine.h"
 
 
 inline void pointPrint(olc::PixelGameEngine* pge, int classes, std::vector<std::pair<int, int>>* in, int r = 1, float scroll = 1.0f, olc::vf2d xyOff = {0 ,0}) {
-	std::vector<olc::Pixel> colors = {olc::RED, olc::BLUE, olc::GREEN, olc::YELLOW, olc::WHITE, olc::MAGENTA, olc::CYAN};
+	std::vector<olc::Pixel> colors = {olc::RED, olc::BLUE, olc::GREEN, olc::YELLOW, olc::WHITE, olc::MAGENTA, olc::CYAN, olc::GREY};
 
 	if (scroll == 0.0f)
 		return;
@@ -21,10 +21,10 @@ inline void pointPrint(olc::PixelGameEngine* pge, int classes, std::vector<std::
 		olc::Pixel currColor = colors[_class % colors.size()];
 
 		for (int px = 0; px < in->size(); px++) {
-			float x = (float)((*in)[px].first) + xyOff.x;
+			float x = (float)((*in)[px].first)  + xyOff.x;
 			float y = (float)((*in)[px].second) + xyOff.y;
 
-			pge->FillCircle(round(x * scroll) + (pge->ScreenWidth() >> 1),
+			pge->FillCircle(round(x * scroll) + (pge->ScreenWidth()  >> 1),
 							round(y * scroll) + (pge->ScreenHeight() >> 1),
 							r, currColor);
 		}
@@ -32,6 +32,8 @@ inline void pointPrint(olc::PixelGameEngine* pge, int classes, std::vector<std::
 		in++;
 	}
 
+	colors.clear();
+	colors.shrink_to_fit();
 }
 
 inline void drawPoints(int screenSize, int pixelSize, int _classes, std::vector<std::pair<int, int>>* in) {
