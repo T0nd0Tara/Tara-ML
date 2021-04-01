@@ -1,6 +1,7 @@
 #include "Matrixf.h"
 
-Matrixf::Matrixf() { // Default-constructor
+// Default-constructor
+Matrixf::Matrixf() { 
 	_Error = "";
 	_ok = true;
 
@@ -11,8 +12,8 @@ Matrixf::Matrixf() { // Default-constructor
 	arr[0] = 0.0f;
 }
 
-
-Matrixf::Matrixf(float* setArr, int setWidth, int setHeight) { // for array
+// for array
+Matrixf::Matrixf(float* setArr, int setWidth, int setHeight) { 
 	_ok = true;
 	_Error = "";
 	
@@ -29,7 +30,9 @@ Matrixf::Matrixf(float* setArr, int setWidth, int setHeight) { // for array
 		setArr++;
 	}
 }
-Matrixf::Matrixf(std::vector<float>* setVec, int setWidth) { // for vector
+
+// for vector
+Matrixf::Matrixf(std::vector<float>* setVec, int setWidth) { 
 	_ok = true;
 	_Error = "";
 
@@ -47,7 +50,8 @@ Matrixf::Matrixf(std::vector<float>* setVec, int setWidth) { // for vector
 
 }
 
-Matrixf::Matrixf(std::vector<float>* setVec, int setHeight, bool ArrayOfVectors) { // for array of vectors
+// for array of vectors
+Matrixf::Matrixf(std::vector<float>* setVec, int setHeight, bool ArrayOfVectors) { 
 	_ok = true;
 	_Error = "";
 
@@ -88,7 +92,81 @@ Matrixf::Matrixf(std::vector<float>* setVec, int setHeight, bool ArrayOfVectors)
 
 }
 
-Matrixf::Matrixf(float setVal, int setWidth, int setHeight) { // sets all of the array to setVal
+Matrixf::Matrixf(std::vector<std::pair<float, float>>* in) {
+	_ok = true;
+	_Error = "";
+
+	width = 2;
+	height = in->size();
+
+	size = (height << 1);
+
+	arr = new float[size];
+
+	for (int i = 0; i < size; i+=2) {
+		arr[i] = (*in)[i >> 1].first;
+		arr[i + 1] = (*in)[i >> 1].second;
+
+	}
+}
+Matrixf::Matrixf(std::vector<Matrixf> in) {
+	_ok = true;
+	_Error = "";
+
+	std::string modelDim = in[0].get_dim();
+
+	for (Matrixf m : in) {
+		if (m.get_width() != 1 && m.get_height() != 1) {
+			_ok = false;
+			_Error = "Cannot construct Matrixf of Marices,\nIf the vector got matrixf m, such that: m.get_width() != 1 && m.get_height() != 1\n";
+			throw std::invalid_argument(_Error);
+			std::cout << _Error;
+			return;
+		}
+		if (m.get_dim() != modelDim) {
+			_ok = false;
+			_Error = "All matrices got to be the same dimension\n";
+			throw std::invalid_argument(_Error);
+			std::cout << _Error;
+			return;
+		}
+	}
+	//delete& modelDim;
+
+
+	bool Horizontals = (in[0].get_height() == 1);
+
+	if (Horizontals) {
+		height = in.size();
+		width = in[0].get_width();
+		size = height * width;
+		
+		arr = new float[size];
+
+		for (int row = 0; row < height; row++) {
+			for (int cell = 0; cell < width; cell++) {
+				arr[cell + row * height] = in[row][cell];
+			}
+		}
+	}
+	else { // verticals
+		height = in[0].get_height();
+		width = in.size();
+
+		size = height * width;
+
+		arr = new float[size];
+
+		for (int col = 0; col < width; col++) {
+			for (int cell = 0; cell < height; cell++) {
+				arr[col + cell * height] = in[col][cell];
+			}
+		}
+	}
+	
+}
+// sets all of the array to setVal
+Matrixf::Matrixf(float setVal, int setWidth, int setHeight) { 
 	_ok = true;
 	_Error = "";
 	
@@ -102,6 +180,8 @@ Matrixf::Matrixf(float setVal, int setWidth, int setHeight) { // sets all of the
 		arr[i] = setVal;
 	}
 }
+
+
 
 std::string Matrixf::to_string() {
 	std::string out = "{ ";
@@ -187,6 +267,11 @@ float Matrixf::get_cell(int i) const{
 	}
 	return arr[i];
 }
+
+void Matrixf::set_cell(int i, float val) {
+	arr[i] = val;
+}
+
 bool Matrixf::ok(std::string* out) const {
 	*out = _Error;
 	return _ok;
@@ -201,6 +286,14 @@ void Matrixf::setHeightWidth(int setHeight, int setWidth) {
 
 std::string Matrixf::get_dim() {
 	return "{ " + std::to_string(width) + ", " + std::to_string(height) + " }";
+}
+
+float Matrixf::sum() {
+	float out = 0.0f;
+	for (int i = 0; i < size; i++) {
+		out += arr[i];
+	}
+	return out;
 }
 
 Matrixf operator*(Matrixf a, float alpha) {

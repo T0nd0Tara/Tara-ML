@@ -139,3 +139,23 @@ inline void randArr(float* out, int size) {
 }
 
 
+template<typename To, typename From>
+inline std::pair<To, To> convert(const std::pair<From, From> p) {
+	return std::make_pair(static_cast<To>(p.first),
+						   static_cast<To>(p.second));
+}
+
+template<typename From, typename To>
+inline void convert(std::vector<std::pair<From, From>>* in, std::vector<std::pair<To, To>>* out, int _array = 1) {
+	for (int arr = 0; arr < _array; arr++) {
+		out->resize(in->size());
+
+		for (int i = 0; i < in->size(); i++)
+			(*out)[i] = convert<To>((*in)[i]);
+
+		in++;
+		out++;
+	}
+}
+
+

@@ -15,27 +15,46 @@
 
 
 int main() {
-	//const int neurons = 5;
-	/*const int BatchSize = 1;
-	std::vector<float> inputs     = {   1.0f,    2.0f,   3.0f,   2.5f,
-										2.0f,    5.0f,  -1.0f,   2.0f,
-									   -1.5f,    2.7f,   3.3f,  -0.8f};
-	Matrixf matInputs = {&inputs , (int)4 };
 
-	LayerDense layer1(4, 5, tanh);
-
-	LayerDense layer2(5, 2, af::sigmoid);
-
-	std::cout << layer1 << '\n';
-	std::cout << *layer1.forward(&matInputs);*/
-	//std::cout << *layer2.forward(layer1.forward(&matInputs)) << "\n\n";
-	
 	srand(time(NULL));
 
 	int classes = 3;
 	std::vector<std::pair<int, int>>* vec = new std::vector<std::pair<int, int>>[classes];
-	dgs::spiralDots2d(1000, 500, classes, vec, 0.5f, 0.5f, 0.5f, 30.0f);
-	drawPoints(1000, 1, classes, vec);
+	std::vector<std::pair<float, float>>* vecf = new std::vector<std::pair<float, float>>[classes];
+	dgs::spiralDots2d(1000, 100, classes, vec, 1.0f, 0.5f, 0.5f);
+	//drawPoints(1000, 1, classes, vec);
+
+	convert<int, float>(vec, vecf, classes);
+	Matrixf matInputs = Matrixf(vecf);
+	//const int neurons = 5;
+	//const int BatchSize = 1;
+	/*std::vector<float> inputs     = {   1.0f,    2.0f,   3.0f,   2.5f,
+										2.0f,    5.0f,  -1.0f,   2.0f,
+									   -1.5f,    2.7f,   3.3f,  -0.8f};
+	Matrixf matInputs = {&inputs , (int)4 };*/
+
+	
+	LayerDense layer1(2, 5, af::softmax);
+
+	
+
+	std::cout << layer1 << '\n';
+	try {
+		Matrixf out = *layer1.forward(&matInputs);
+		std::cout << out << '\n';
+
+		for (int i = 0; i < out.get_height(); i++) {
+			std::cout << out.get_row(i).sum() << '\n';
+		}
+	}
+	catch (std::invalid_argument& e) {
+		std::cout << "Error: " << e.what();
+	}
+
+	//LayerDense layer2(5, 2, af::sigmoid);
+	//std::cout << *layer2.forward(layer1.forward(&matInputs)) << "\n\n";
+	
+	
 
 	return 0;
 }

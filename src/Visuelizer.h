@@ -14,17 +14,18 @@ inline void pointPrint(olc::PixelGameEngine* pge, int classes, std::vector<std::
 		return;
 
 
-	if (scroll < 0.25f)
-		r = round((float)r / (2.0f * sqrtf(scroll)));
+	//if (scroll >= 0.25f)
+	r = round((float)r * sqrtf(scroll));
 
 	for (int _class = 0; _class < classes; _class++) {
 		olc::Pixel currColor = colors[_class % colors.size()];
 
 		for (int px = 0; px < in->size(); px++) {
-			float x = (float)((*in)[px].first + (pge->ScreenWidth() >> 1)) + xyOff.x;
-			float y = (float)((*in)[px].second + (pge->ScreenHeight() >> 1)) + xyOff.y;
-			pge->FillCircle(round(x * scroll),
-							round(y * scroll),
+			float x = (float)((*in)[px].first) + xyOff.x;
+			float y = (float)((*in)[px].second) + xyOff.y;
+
+			pge->FillCircle(round(x * scroll) + (pge->ScreenWidth() >> 1),
+							round(y * scroll) + (pge->ScreenHeight() >> 1),
 							r, currColor);
 		}
 
@@ -54,8 +55,6 @@ inline void drawPoints(int screenSize, int pixelSize, int _classes, std::vector<
 		}
 		bool OnUserUpdate(float elapsedTime) override {
 			Clear(0);
-			pointPrint(this, classes, vec, 2, scrollOffset, xyOff);
-
 
 
 			if (GetKey(olc::W).bHeld) xyOff.y += 1000.0f * elapsedTime / scrollOffset;
@@ -63,10 +62,12 @@ inline void drawPoints(int screenSize, int pixelSize, int _classes, std::vector<
 			if (GetKey(olc::S).bHeld) xyOff.y -= 1000.0f * elapsedTime / scrollOffset;
 			if (GetKey(olc::D).bHeld) xyOff.x -= 1000.0f * elapsedTime / scrollOffset;
 
-			if (GetKey(olc::Q).bPressed) scrollOffset /= 1.5f;
-			if (GetKey(olc::E).bPressed) scrollOffset *= 1.5f;
+			if (GetKey(olc::Q).bPressed) scrollOffset *= 1.5f;
+			if (GetKey(olc::E).bPressed) scrollOffset /= 1.5f;
 
 			if (GetKey(olc::ESCAPE).bPressed) return false;
+
+			pointPrint(this, classes, vec, 2, scrollOffset, xyOff);
 			return true;
 		}
 	};

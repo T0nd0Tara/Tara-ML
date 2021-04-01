@@ -35,6 +35,10 @@ inline void spiralDots2d(int screenSize, int points, int classes, std::vector<st
 
 		float dirSpiral = TWO_PI * rand0_1();
 
+		float rScaler = 1.0f;
+		// makes every class, a different radius
+		//rScaler += rand0_1();
+
 		for (int point = 0; point < points; point++) {
 			float t = (float)point * 0.1f + rand_1_1() * tErr;
 
@@ -43,8 +47,8 @@ inline void spiralDots2d(int screenSize, int points, int classes, std::vector<st
 			float tcost = t * cosf(t);
 			float tsint = t * sinf(t);
 
-			(*out)[point] = { round(r * (rx(tsint, tcost, dirSpiral) + rand_1_1() * xErr)),
-							  round(r * (ry(tsint, tcost, dirSpiral) + rand_1_1() * yErr)) };
+			(*out)[point] = { round(rScaler * r * (rx(tsint, tcost, dirSpiral) + rand_1_1() * xErr)),
+							  round(rScaler * r * (ry(tsint, tcost, dirSpiral) + rand_1_1() * yErr)) };
 		
 
 		}
