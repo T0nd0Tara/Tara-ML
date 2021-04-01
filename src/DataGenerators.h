@@ -37,7 +37,9 @@ inline void spiralDots2d(int screenSize, int points, int classes, std::vector<st
 
 		for (int point = 0; point < points; point++) {
 			float t = (float)point * 0.1f + rand_1_1() * tErr;
-			t *= exp(-10.0f * t / (float)screenSize);
+
+			t *= exp(-t / 100.0f);
+
 			float tcost = t * cosf(t);
 			float tsint = t * sinf(t);
 

@@ -13,25 +13,7 @@
 #include "olcPixelGameEngine.h"
 
 
-class Visuelizer : public olc::PixelGameEngine {
-public:
-	Visuelizer() {
-		sAppName = "Visuelizer";
-	}
-protected:
-	int classes = 3;
-	std::vector<std::pair<int, int>>* vec = new std::vector<std::pair<int, int>>[classes];
-	bool OnUserCreate() override {
-		srand(time(NULL));
-		dgs::spiralDots2d(ScreenWidth(), 500, classes, vec, 0.5f, 0.5f, 0.5f);
-		return true;
-	}
-	bool OnUserUpdate(float elapsedTime) override {
-		Clear(0);
-		pointPrint(this, classes, vec, 2);
-		return true;
-	}
-};
+
 int main() {
 	//const int neurons = 5;
 	/*const int BatchSize = 1;
@@ -48,11 +30,12 @@ int main() {
 	std::cout << *layer1.forward(&matInputs);*/
 	//std::cout << *layer2.forward(layer1.forward(&matInputs)) << "\n\n";
 	
-	
-	
-	Visuelizer vis;
-	if (vis.Construct(1000, 1000, 1, 1))
-		vis.Start();
+	srand(time(NULL));
+
+	int classes = 3;
+	std::vector<std::pair<int, int>>* vec = new std::vector<std::pair<int, int>>[classes];
+	dgs::spiralDots2d(1000, 500, classes, vec, 0.5f, 0.5f, 0.5f, 30.0f);
+	drawPoints(1000, 1, classes, vec);
 
 	return 0;
 }
